@@ -6,14 +6,34 @@ output:
 date: "2024-02-21"
 ---
 
-### introduction
+```{r}
+library(tidyverse)
+library(spotifyr)
+library(compmus)
+library(ggplot2)
+```
 
-### visualization
+
+```{r}
+reggae_music <- get_playlist_audio_features("", "3Hj0cp2SSdvJWmiyYnStLG")
+```
 
 
+### Introduction
+
+
+
+
+### Visualization
+
+```{r}
+ggplot(reggae_music, aes(x=danceability, y=valence)) +
+  geom_point() +
+  theme_classic()
+```
 
 ***
 sidebar
 
-### conclusion
+### Conclusion
 
