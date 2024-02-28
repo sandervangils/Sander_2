@@ -1,2 +1,4 @@
 # Sander_2
-rest
+remotes::install_github('jaburgoyne/compmus')
+
+
