@@ -1,9 +1,9 @@
 ---
-title: "portfolio"
+title: "Portfolio"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
-date: "2024-02-21"
+date: "2024-02-28"
 ---
 
 ```{r}
@@ -27,13 +27,16 @@ reggae_music <- get_playlist_audio_features("", "3Hj0cp2SSdvJWmiyYnStLG")
 ### Visualization
 
 ```{r}
-ggplot(reggae_music, aes(x=danceability, y=valence)) +
+dance_valence_plot <- ggplot(reggae_music, aes(x=danceability, y=valence)) +
   geom_point() +
   theme_classic()
 ```
 
+```{r}
+dance_valence_plot
+```
 ***
-sidebar
+sidebar ik heb wat veranderd
 
 ### Conclusion
 
