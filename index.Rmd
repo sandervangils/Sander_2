@@ -11,8 +11,6 @@ library(tidyverse)
 library(spotifyr)
 library(compmus)
 library(ggplot2)
-
-reggae_music <- get_playlist_audio_features("", "3Hj0cp2SSdvJWmiyYnStLG")
 ```
 
 
@@ -29,60 +27,55 @@ I would like to focus on reggae music this course. It is a very big genre with a
 #### Graph 1
 
 ```{r}
-ggplot(reggae_music, aes(x=danceability, y=valence)) +
-  geom_point() +
+police_in_helicopter <- get_tidy_audio_analysis("0mD19MC6H0OzHvEUADHypU")
+
+police_in_helicopter |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
   theme_classic()
 
 ```
+This tempogram is of Police In Helicopter by John Holt. 
 
-reggae is dus heel blij en dansbaar. :)
 
 #### Graph 2
 
 ```{r}
-pata_pata <-
-  get_tidy_audio_analysis("3uy90vHHATPjtdilshDQDt") |>
-  select(segments) |>
-  unnest(segments)
+kingston_town <- get_tidy_audio_analysis("6cOrnBtY3jN76BQpYTiD8v")
+
+kingston_town |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
 
 ```
+
+This is a tempogram of Kingston Town bij Alborosie.
 
 #### Graph 3
 
 ```{r}
-pata_pata |>
-  mutate(loudness_max_time = start + loudness_max_time) |>
-  arrange(loudness_max_time) |>
-  mutate(delta_loudness = loudness_max - lag(loudness_max)) |>
-  ggplot(aes(x = loudness_max_time, y = pmax(0, delta_loudness))) +
-  geom_line() +
-  xlim(0, 30) +
-  theme_minimal() +
-  labs(x = "Time (s)", y = "Novelty")
+Joanna_gimme_hope <- get_tidy_audio_analysis("6295Cr4SGdjJgnJ6DLtZFn")
 
+Joanna_gimme_hope |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
 ```
-
-
-```{r}
-pata_pata |>
-  mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
-  arrange(start) |>
-  mutate(pitches = map2(pitches, lag(pitches), `-`)) |>
-  slice(-1) |> 
-  compmus_gather_chroma() |> 
-  group_by(start, duration) |> 
-  summarise(novelty = sum(log1p(pmax(value, 0)))) |> 
-  ggplot(aes(x = start + duration / 2, y = novelty)) +
-  geom_line() +
-  xlim(0, 30) +
-  theme_minimal() +
-  labs(x = "Time (s)", y = "Novelty")
-```
-
+This is a tempogram of Joanna Gimme Hope by Eddy Grant. As you can see the BPM stays the same for the whole song. 
 
 
 ***
-Sidebar voor extra uitleg
+I have made a tempogram of the song Kingston Town by Alborosie. As you can see this song stays steady on the 150 bpm. However it  
 
 
 ### Conclusion
