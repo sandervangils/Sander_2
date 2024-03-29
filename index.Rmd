@@ -38,30 +38,549 @@ Dark_side_of_the_moon <- get_playlist_audio_features("", "06qCn3TG1q0Aw5o3ky61cj
 
 ### Introduction
 
-I would like to focus on reggae music this course. It is a very big genre with a lot of sub-genres. Reggae had its highlights with people like Bob Marley and Lee 'Scratch' Perry, but nowadays it isn't that big anymore. A lot of people from different ethnicities and ages across the world love reggae and continue to make reggae music. It is very interesting to see so many different kinds of people enjoy the music that originated in Jamaica. I have a reggae-playlist in which I put everything from roots reggae to a reggae-punk fusion and dub. When I listen to music it is almost exclusively via Spotify and I actually don't listen to that playlist a lot. I mostly listen to my liked songs which is a list of 4700 songs of all kinds. Maybe there are some sub-genres that is missed in reggae, or maybe the playlist is not big enough. Songs like One Drop of Bob Marley & the Wailers are very typical for reggae. It gives a lot of positive energy and is very easy going. A song like Full Speed of Mike Pinto has the very recognizeable reggae feeling to it but it also has a hard-rock section halfway through which is very untypical. 
+For this portfolio I will focus on the album "The Dark Side Of The Moon" by Pink Floyd and the dub version of the album "The Dub Side Of The Moon" by Easy Star All-Stars. Using Spotify's API's I will take a look at how Spotify recognizes the diffenences between these two albums. 
+
+The albumcover of The Dark Side Of The Moon is very well known across the whole world. Also the music is critically acclaimed, landing on pace 43 in Rolling Stones's "500 greatest albums list".(1) Since it was released it has been an inspiration for a lot of artists till this day, especially in progressive rock. The album has innovative elements like spoken-word elements and uncoventional time signatures like 7/4 with "Money".  
+
+The reggae re-working of the above-mentioned album has also been very positively received. It is the first album of Easy Star All-Stars. After this the group also made other dub versions of popular album like "Easy Star's Lonely Hearts Dub Band" and "Ziggy Stardub". Reggae/dub is known to be happier and more danceable than progressive rock. Also all almost dub/reggae songs are in a 4/4 time signature. It will be interesting to see how Easy Star puts the innovative Pink Floyd album in a dub context. 
+
+
+
+
+1. https://www.rollingstone.com/music/music-lists/500-greatest-albums-of-all-time-156826/public-enemy-it-takes-a-nation-of-millions-to-hold-us-back-2-165804/ 
+
 
 
 ### week 7 huiswerk
 
 
+
+#### code 2
+```{r}
+albums <-
+  bind_rows(
+    Dub_side_of_the_moon |> mutate(category = "Dub Side Of The Moon"),
+    Dark_side_of_the_moon |> mutate(category = "Dark Side Of The Moon")
+  )
+```
+#### Energy Dub side
+```{r}
+
+Dub_side_of_the_moon |> ggplot(aes(x = valence)) + geom_histogram(binwidth = 0.1)
+
+```
+#### Difference in energy 
+
+```{r}
+
+albums |>
+  ggplot(aes(x = energy)) +
+  geom_histogram(binwidth = 0.1) +
+  facet_wrap(~category)
+```
+
+```{r}
+
+albums |>
+  ggplot(aes(x = category, y = danceability)) +
+  geom_boxplot()
+```
+
+```{r}
+albums |>
+  ggplot(aes(x = category, y = valence)) +
+  geom_violin()
+```
+
+
+```{r}
+albums |>                    # Start with awards.
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     # Set up the plot.
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = mode
+    )
+  ) +
+  geom_point() +              # Scatter plot.
+  geom_rug(linewidth = 0.1) + # Add 'fringes' to show data distribution.
+  geom_text(                  # Add text labels from above.
+    aes(
+      x = valence,
+      y = energy,
+      label = label
+    ),
+    data = 
+      tibble(
+        label = c("STEAM WALTZ", "Darkness and Scattered Light"),
+        category = c("Dub side", "Dark Side"),
+        valence = c(0.104, 0.0339),
+        energy = c(0.992, 0.00166)
+      ),
+    colour = "black",         # Override colour (not mode here).
+    size = 3,                 # Override size (not loudness here).
+    hjust = "left",           # Align left side of label with the point.
+    vjust = "center",         # Align vertical center of label with the point.
+    nudge_x = 0.02            # Nudge the label slightly right.
+  ) +
+  facet_wrap(~ category) +    # Separate charts per playlist.
+  scale_x_continuous(         # Fine-tune the x axis.
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   # Use grid-lines for quadrants only.
+    minor_breaks = NULL       # Remove 'minor' grid-lines.
+  ) +
+  scale_y_continuous(         # Fine-tune the y axis in the same way.
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_brewer(        # Use the Color Brewer to choose a palette.
+    type = "qual",            # Qualitative set.
+    palette = "Paired"        # Name of the palette is 'Paired'.
+  ) +
+  scale_size_continuous(      # Fine-tune the sizes of each point.
+    trans = "exp",            # Use an exp transformation to emphasise loud.
+    guide = "none"            # Remove the legend for size.
+  ) +
+  theme_light() +             # Use a simpler theme.
+  labs(                       # Make the titles nice.
+    x = "Valence",
+    y = "Energy",
+    colour = "Mode"
+  )
+```
+*** 
+As you can see there is a very clear difference in energy, valence and danceability between the two albums. Dub Side is a lot more energetic according to the spotify API. Valence is also higher in the dub version of the album, as well as danceability. This is to be expected since Dark Side is known have a lot of sensitive and calmer music. To make it more dub Easy Star added more instruments and sounds. This makes the music less sensitive and calm but more energetic and positive!  
+
+
 ### week 8 huiswerk
 
+#### chromagrams!
+```{r}
+any_color_you_like_dark <-
+  get_tidy_audio_analysis("1wGoqD0vrf7njGvxm8CEf5") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+any_color_you_like_dark |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+
+```
+```{r}
+any_color_you_like_dub <-
+  get_tidy_audio_analysis("6Y6hUMmFGfpGggqnrwNYF0") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+any_color_you_like_dub |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+***
+These two chromagram show the pitches that are used in this piece of music. I have chosen to compare Any Color You Like with the dub-version of itself. As expected, there is not a lot of difference between the two. Since the dub-version still plays the same notes because otherwise it would be a different song! However, the dub-version is a bit longer (3:38) than the original (3:26). 
+
+```{r}
+compmus_long_distance(
+  any_color_you_like_dub |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
+  any_color_you_like_dark |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
+  feature = pitches,
+  method = "euclidean"
+) |>
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_equal() +
+  labs(x = "Dub Side", y = "Dark Side") +
+  theme_minimal() +
+  scale_fill_viridis_c(guide = NULL)
+
+```
+here we can see the comparison of the two versions. there is no diagonal blue line since it is not an exact copy. What we learn from this is that the structure of the songs is the same, since there is no checkerboard pattern. According to the color of the graph there is some difference in pitches but not a lot. This is all very logical.
 
 ### week 9 huiswerk
+```{r}
+great_gig_in_the_sky_dub <-
+  get_tidy_audio_analysis("3QqQmA4Cu63Sw1ZTOPTlfP") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
 
+great_gig_in_the_sky_dub |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  scale_fill_viridis_c() +                              
+  theme_classic()
+```
+```{r}
+great_gig_in_the_sky_dark <-
+  get_tidy_audio_analysis("25tZHMv3ctlzqDaHAeuU9c") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+great_gig_in_the_sky_dark |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  scale_fill_viridis_c() +                              
+  theme_classic()
+```
+
+
+***
+I have made cepstrograms of the two versions for The Great Gig In The Sky. The Dark Side version has a very clear magnitude on c02. The dub version also has its highest magnitude on c02 but it is not as strong as the Dark Side version. 
+
+```{r}
+great_gig_in_the_sky_dub |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+
+
+```
+```{r}
+great_gig_in_the_sky_dark |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+
+
+```
+
+In the two self similarity matrices show that the timbre of teh dub-version stays the same for the whole song. The original version however, does have some differences. It is also clear that Clare Torry starts to show her vocal virtuosity around 75 seconds. After the first 2 blocks it gets a bit messy because it is part instrumental and part vocal. 
 
 ### week 10 huiswerk
+```{r}
+circshift <- function(v, n) {
+  if (n == 0) v else c(tail(v, n), head(v, -n))
+}
+
+#      C     C#    D     Eb    E     F     F#    G     Ab    A     Bb    B
+major_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    0,    0)
+minor_chord <-
+  c(   1,    0,    0,    1,    0,    0,    0,    1,    0,    0,    0,    0)
+seventh_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    1,    0)
+
+major_key <-
+  c(6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88)
+minor_key <-
+  c(6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17)
+
+chord_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:7", circshift(seventh_chord, 6),
+    "Gb:maj", circshift(major_chord, 6),
+    "Bb:min", circshift(minor_chord, 10),
+    "Db:maj", circshift(major_chord, 1),
+    "F:min", circshift(minor_chord, 5),
+    "Ab:7", circshift(seventh_chord, 8),
+    "Ab:maj", circshift(major_chord, 8),
+    "C:min", circshift(minor_chord, 0),
+    "Eb:7", circshift(seventh_chord, 3),
+    "Eb:maj", circshift(major_chord, 3),
+    "G:min", circshift(minor_chord, 7),
+    "Bb:7", circshift(seventh_chord, 10),
+    "Bb:maj", circshift(major_chord, 10),
+    "D:min", circshift(minor_chord, 2),
+    "F:7", circshift(seventh_chord, 5),
+    "F:maj", circshift(major_chord, 5),
+    "A:min", circshift(minor_chord, 9),
+    "C:7", circshift(seventh_chord, 0),
+    "C:maj", circshift(major_chord, 0),
+    "E:min", circshift(minor_chord, 4),
+    "G:7", circshift(seventh_chord, 7),
+    "G:maj", circshift(major_chord, 7),
+    "B:min", circshift(minor_chord, 11),
+    "D:7", circshift(seventh_chord, 2),
+    "D:maj", circshift(major_chord, 2),
+    "F#:min", circshift(minor_chord, 6),
+    "A:7", circshift(seventh_chord, 9),
+    "A:maj", circshift(major_chord, 9),
+    "C#:min", circshift(minor_chord, 1),
+    "E:7", circshift(seventh_chord, 4),
+    "E:maj", circshift(major_chord, 4),
+    "G#:min", circshift(minor_chord, 8),
+    "B:7", circshift(seventh_chord, 11),
+    "B:maj", circshift(major_chord, 11),
+    "D#:min", circshift(minor_chord, 3)
+  )
+
+key_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:maj", circshift(major_key, 6),
+    "Bb:min", circshift(minor_key, 10),
+    "Db:maj", circshift(major_key, 1),
+    "F:min", circshift(minor_key, 5),
+    "Ab:maj", circshift(major_key, 8),
+    "C:min", circshift(minor_key, 0),
+    "Eb:maj", circshift(major_key, 3),
+    "G:min", circshift(minor_key, 7),
+    "Bb:maj", circshift(major_key, 10),
+    "D:min", circshift(minor_key, 2),
+    "F:maj", circshift(major_key, 5),
+    "A:min", circshift(minor_key, 9),
+    "C:maj", circshift(major_key, 0),
+    "E:min", circshift(minor_key, 4),
+    "G:maj", circshift(major_key, 7),
+    "B:min", circshift(minor_key, 11),
+    "D:maj", circshift(major_key, 2),
+    "F#:min", circshift(minor_key, 6),
+    "A:maj", circshift(major_key, 9),
+    "C#:min", circshift(minor_key, 1),
+    "E:maj", circshift(major_key, 4),
+    "G#:min", circshift(minor_key, 8),
+    "B:maj", circshift(major_key, 11),
+    "D#:min", circshift(minor_key, 3)
+  )
+
+
+```
+
+```{r}
+money_dub <-
+  get_tidy_audio_analysis("5QREkNN2kAKUsXppK9Vrcu") |>
+  compmus_align(sections, segments) |>
+  select(sections) |>
+  unnest(sections) |>
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      )
+  )
+
+
+money_dub |> 
+  compmus_match_pitch_template(
+    key_templates,         # Change to chord_templates if descired
+    method = "euclidean",  # Try different distance metrics
+    norm = "manhattan"     # Try different norms
+  ) |>
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "")
+```
+```{r}
+money_dark <-
+  get_tidy_audio_analysis("7Gx2q0ueNwvDp2BOZYGCMO") |>
+  compmus_align(sections, segments) |>
+  select(sections) |>
+  unnest(sections) |>
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      )
+  )
+
+
+money_dark |> 
+  compmus_match_pitch_template(
+    key_templates,         # Change to chord_templates if descired
+    method = "euclidean",  # Try different distance metrics
+    norm = "manhattan"     # Try different norms
+  ) |>
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "")
+```
+
+*** 
+I am comparing Money with eachother. It seems like they are total opposites.
+
+
+```{r}
+Dark_side_of_the_moon <-
+  get_playlist_audio_features(
+    "",
+    "06qCn3TG1q0Aw5o3ky61cj"
+  ) |>
+  slice(1:30) |>
+  add_audio_analysis()
+```
+
+```{r}
+Dub_side_of_the_moon <-
+  get_playlist_audio_features(
+    "",
+    "6NZckmxOUUYgPcx9wm8UVJ"
+  ) |>
+  slice(1:30) |>
+  add_audio_analysis()
+
+corpus <-
+  Dark_side_of_the_moon |>
+  mutate(genre = "Dark Side") |>
+  bind_rows(Dub_side_of_the_moon |> mutate(genre = "Dub Side"))
+
+```
+
+```{r}
+corpus |>
+  mutate(
+    sections =
+      map(
+        sections,                                    # sections or segments
+        summarise_at,
+        vars(tempo, loudness, duration),             # features of interest
+        list(section_mean = mean, section_sd = sd)   # aggregation functions
+      )
+  ) |>
+  unnest(sections) |>
+  ggplot(
+    aes(
+      x = tempo,
+      y = tempo_section_sd,
+      colour = genre,
+      alpha = loudness
+    )
+  ) +
+  geom_point(aes(size = duration / 60)) +
+  geom_rug() +
+  theme_minimal() +
+  ylim(0, 5) +
+  labs(
+    x = "Mean Tempo (bpm)",
+    y = "SD Tempo",
+    colour = "Genre",
+    size = "Duration (min)",
+    alpha = "Volume (dBFS)"
+  )
+
+```
+
+
+
 
 ### Week 11 huiswerk
-
-
 
 #### Graph 1
 
 ```{r}
-police_in_helicopter <- get_tidy_audio_analysis("0mD19MC6H0OzHvEUADHypU")
+time_dub <- get_tidy_audio_analysis("1uLBDlBZROhCvLAX5LdKrI")
 
-police_in_helicopter |>
+time_dub |>
   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
   ggplot(aes(x = time, y = bpm, fill = power)) +
   geom_raster() +
@@ -70,15 +589,15 @@ police_in_helicopter |>
   theme_classic()
 
 ```
-This tempogram is of Police In Helicopter by John Holt. 
+This tempogram is of time dub. 
 
 
 #### Graph 2
 
 ```{r}
-kingston_town <- get_tidy_audio_analysis("6cOrnBtY3jN76BQpYTiD8v")
+time_dark <- get_tidy_audio_analysis("4xHWH1jwV5j4mBYRhxPbwZ")
 
-kingston_town |>
+time_dark |>
   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
   ggplot(aes(x = time, y = bpm, fill = power)) +
   geom_raster() +
@@ -88,22 +607,10 @@ kingston_town |>
 
 ```
 
-This is a tempogram of Kingston Town bij Alborosie.
+This is a tempogram time dark.
 
-#### Graph 3
-
-```{r}
-full_speed <- get_tidy_audio_analysis("5JUcFTvDLN67VthAQlLQFe")
-
-full_speed |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
-```
-This is a tempogram of Full speed by Mike Pinto. As you can see the BPM changes halfway through. This is the part where the hardrock part starts. 
+***
+It is hard for the code to determine a clear BPM for the song. 
 
 
 ### week 12 huiswerk
