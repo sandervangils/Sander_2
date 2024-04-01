@@ -57,10 +57,10 @@ The reggae re-working of the above-mentioned album has also been very positively
 albums <-
   bind_rows(
     Dub_side_of_the_moon |> mutate(category = "Dub Side Of The Moon"),
-    Dark_side_of_the_moon |> mutate(category = "Dark_Side Of The Moon")
+    Dark_side_of_the_moon |> mutate(category = "Dark Side Of The Moon")
   )
 ```
-#### Valence Dub side
+#### Valence Dub Side
 ```{r}
 
 Dub_side_of_the_moon |> ggplot(aes(x = valence)) + geom_histogram(binwidth = 0.1)
@@ -151,7 +151,7 @@ albums |>                    # Start with awards.
   )
 ```
 *** 
-As you can see there is a very clear difference in energy, valence and danceability between the two albums. Dub Side is a lot more energetic according to the spotify API. Valence is also higher in the dub version of the album, as well as danceability. This is to be expected since Dark_Side is known have a lot of sensitive and calmer music. To make it more dub Easy Star added more instruments and sounds. This makes the music less sensitive and calm but more energetic and positive!  
+As you can see there is a very clear difference in energy, valence and danceability between the two albums. Dub Side is a lot more energetic according to the spotify API. Valence is also higher in the dub version of the album, as well as danceability. This is to be expected since the original version of the album is known have a lot of sensitive and calmer music. To make it more dub Easy Star added more instruments and sounds. This makes the music less sensitive and calm but more energetic and positive. 
 
 
 ### Chromagrams 
@@ -226,7 +226,7 @@ compmus_long_distance(
   ) +
   geom_tile() +
   coord_equal() +
-  labs(x = "Dub Side", y = "Dark_Side") +
+  labs(x = "Dub Side", y = "Dark Side") +
   theme_minimal() +
   scale_fill_viridis_c(guide = NULL)
 
@@ -234,9 +234,9 @@ compmus_long_distance(
 
 
 ***
-These two chromagram show the pitches that are used in this piece of music. I have chosen to compare Any Color You Like with the dub-version of itself. As expected, there is not a lot of difference between the two. Since the dub-version still plays the same notes because otherwise it would be a different song! However, the dub-version is a bit longer (3:38) than the original (3:26). 
+These two chromagrams show the pitches that are used in this piece of music. I have chosen to compare Any Color You Like with the dub-version of itself. As expected, there is not a lot of difference between the two. The dub-version still plays the same notes, otherwise it would be a different song. However, the dub-version is a bit longer (3:38) than the original (3:26). 
 
-At last we can see a comparison of the two versions. there is no diagonal blue line since it is not an exact copy. Since there are no recognizeable shape structures in the graph we can conclude that the two songs are symmetrical in song-structure. According to the color of the graph there is some difference in pitches but not a lot. This is all very logical.
+In the last graph we can see a direct comparison of the two versions. there is no diagonal blue line like with a self similarity matrix, because it is not an exact copy. Since there are no recognizable shapes in the graph we can conclude that the two songs are symmetrical in song-structure. According to the color of the graph there is some difference in pitches but not a lot. This is all very logical.
 
 ### Ceptograms
 
@@ -364,7 +364,9 @@ great_gig_in_the_sky_dark |>
 
 ```
 ***
-In the two self similarity matrices show that the timbre of the dub-version stays the same for the whole song. The original version however, does have some differences. It is also clear that Clare Torry starts to show her vocal virtuosity around 75 seconds. After the first 2 blocks it gets a bit messy because it is part instrumental and part vocal. However, there is still somewhat of a checkerboard recognizeable which indicates the song is very homogene. 
+In the two self similarity matrices show that the timbre of the dub-version stays the same for the whole song. The original version however, does have some differences. It is also clear that Clare Torry starts to show her vocal virtuosity around 75 seconds. After the first 2 blocks it gets a bit messy because it is part instrumental and part vocal. However, there is still somewhat of a checkerboard recognizable which indicates the song is very homogene. 
+
+The graph of the dub-version is very empty and there is no recognizable pattern. This means that there a nog changes in timbre in the song.
 
 
 
@@ -523,7 +525,7 @@ money_dark |>
 
 
 *** 
-I am comparing Money with eachother. It seems like they are total opposites.The parts between around 30-150 seconds and  300-350 seconds of the Dark-version seem very identical which also corresoponds with the actual song. according to Wikipedia the song is the key B minor, which we don't see in chordogram (2). Eb major seems to be the strongest chord according to our chordogram, so that's very interesting. It looks like the chordogram finds it difficult to follow the chord-progression of the song.
+The parts between around 30-150 seconds and 300-350 seconds of the Dark-version seem very identical which also corresponds with the actual song. according to Wikipedia the song is the key B minor, which we don't see in chordogram (2). E-flat major seems to be the strongest chord according to our chordogram, so that's very interesting. It looks like the chordogram finds it difficult to follow the chord-progression of the song.
 
 It looks like there is less going on in the Dub-version. I think this is because the solo of the Dark-version (which contains the two clear peaks) is replaced by Jamaican-like singing about Jah and money. Also there is a lot of echoing used which might influence how spotify sees the chord-progression of the song
 
@@ -595,7 +597,7 @@ corpus <-
   bind_rows(Dub_side_of_the_moon |> mutate(genre = "Dub Side"))
 
 ```
-
+#### Standard deviation tempo comparison
 ```{r}
 corpus |>
   mutate(
@@ -631,9 +633,9 @@ corpus |>
 ```
 
 ***
-It appears to be hard for the code to determine a clear BPM for the song. Both songs start with clock alarms (the dub-version contains somewhat more primitive alarms like the sound of a rooster) which explains he start of both tempograms. When the singing starts around 150 seconds the BPM rises from 120 to 130. around 180 seconds the song gets more calm and background vocals are added. Apparently this makes it very difficult for spotify to observe a tempo. between 300-330 seconds the music repeats like it was around the 150 sec mark. Also the more calm bit gets repeated. 
+It appears to be hard for the code to determine a clear BPM for the song. Both songs start with clock alarms (the dub-version contains somewhat more primitive alarms like the sound of a rooster) which explains the start of both tempograms. When the singing starts around 150 seconds the BPM rises from 120 to 130. around 180 seconds the song gets more calm and background vocals are added. Apparently this makes it very difficult for spotify to observe a tempo. between 300-330 seconds the music repeats like it was around the 150 sec mark. Also the more calm bit gets repeated. 
 
-The Dub-version is a lot more clear. Because of the reggae rhythm it is easier for spotify to find a clear tempo. This version doesn't have a calmer bit with background vocals. We still see the same change in tempo around the 150 second-mark, which is when the singing starts. The tempogram also gets confused around the 350 seconds. Here almost all music fades out. 
+The Dub-version is a lot more clear. Because of the reggae rhythm it is easier for spotify to find a clear tempo. This version doesn't have a calmer bit with background vocals. We still see the same change in tempo around the 150 second-mark, which is when the singing starts. The tempogram also gets confused around the 350 seconds. This is when almost all music fades out. 
 
 The last graph shows us that Dark Side has a lot more variance in tempo. My theory is that all of the music by Pink Floyd is harder to put into a clear tempogram because of the way that the music is composed. Also, in dub music there is not a lot of variance in tempo.
 
@@ -785,7 +787,5 @@ Dub_Side_dist |>
 ***
 The dendrograms show that is hard to put the songs into clusters. I must admit that I find these graphs confusing for this project since the all the songs are from the same album and thus are somewhat alike. Therefore it is a bit pointless to see what clusters are formed. However it is interesting to see that most songs are separate from eachother.
 
-### Conclusion
 
-So, we have analyzed all kinds of graphs showcasing the difference in spotify API's.
 
