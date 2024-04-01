@@ -1,9 +1,9 @@
 ---
-title: "Portfolio"
+title: "Portfolio Sander van Gils"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
-date: "2024-02-28"
+date: "2024-04-02"
 ---
 
 ```{r}
@@ -38,9 +38,9 @@ Dark_side_of_the_moon <- get_playlist_audio_features("", "06qCn3TG1q0Aw5o3ky61cj
 
 ### Introduction
 
-For this portfolio I will focus on the album "The Dark Side Of The Moon" by Pink Floyd and the dub version of the album "The Dub Side Of The Moon" by Easy Star All-Stars. Using Spotify's API's I will take a look at how Spotify recognizes the diffenences between these two albums. 
+For this portfolio I will focus on the album "The Dark Side Of The Moon" by Pink Floyd and the dub version of the album "The Dub Side Of The Moon" by Easy Star All-Stars. Using Spotify's API's I will take a look at how Spotify recognizes the differences between these two albums. 
 
-The albumcover of The Dark Side Of The Moon is very well known across the whole world. Also the music is critically acclaimed, landing on pace 43 in Rolling Stones's "500 greatest albums list".(1) Since it was released it has been an inspiration for a lot of artists till this day, especially in progressive rock. The album has innovative elements like spoken-word elements and uncoventional time signatures like 7/4 with "Money".  
+The albumcover of The Dark Side Of The Moon is very well known across the whole world. Also the music is critically acclaimed, landing on pace 43 in Rolling Stones's "500 greatest albums list" (1). Since it was released it has been an inspiration for a lot of artists, especially in progressive rock. The album has innovative elements like spoken-word elements and unconventional time signatures like 7/4 with "Money".  
 
 The reggae re-working of the above-mentioned album has also been very positively received. It is the first album of Easy Star All-Stars. After this the group also made other dub versions of popular album like "Easy Star's Lonely Hearts Dub Band" and "Ziggy Stardub". Reggae/dub is known to be happier and more danceable than progressive rock. Also all almost dub/reggae songs are in a 4/4 time signature. It will be interesting to see how Easy Star puts the innovative Pink Floyd album in a dub context. 
 
@@ -51,19 +51,16 @@ The reggae re-working of the above-mentioned album has also been very positively
 
 
 
-### week 7 huiswerk
+### Comparing danceability, energy and valence
 
-
-
-#### code 2
 ```{r}
 albums <-
   bind_rows(
     Dub_side_of_the_moon |> mutate(category = "Dub Side Of The Moon"),
-    Dark_side_of_the_moon |> mutate(category = "Dark Side Of The Moon")
+    Dark_side_of_the_moon |> mutate(category = "Dark_Side Of The Moon")
   )
 ```
-#### Energy Dub side
+#### Valence Dub side
 ```{r}
 
 Dub_side_of_the_moon |> ggplot(aes(x = valence)) + geom_histogram(binwidth = 0.1)
@@ -78,21 +75,21 @@ albums |>
   geom_histogram(binwidth = 0.1) +
   facet_wrap(~category)
 ```
-
+#### Difference in danceability
 ```{r}
 
 albums |>
   ggplot(aes(x = category, y = danceability)) +
   geom_boxplot()
 ```
-
+#### Difference in Valence
 ```{r}
 albums |>
   ggplot(aes(x = category, y = valence)) +
   geom_violin()
 ```
 
-
+#### Comparing energy, valence and loudness
 ```{r}
 albums |>                    # Start with awards.
   mutate(
@@ -154,12 +151,12 @@ albums |>                    # Start with awards.
   )
 ```
 *** 
-As you can see there is a very clear difference in energy, valence and danceability between the two albums. Dub Side is a lot more energetic according to the spotify API. Valence is also higher in the dub version of the album, as well as danceability. This is to be expected since Dark Side is known have a lot of sensitive and calmer music. To make it more dub Easy Star added more instruments and sounds. This makes the music less sensitive and calm but more energetic and positive!  
+As you can see there is a very clear difference in energy, valence and danceability between the two albums. Dub Side is a lot more energetic according to the spotify API. Valence is also higher in the dub version of the album, as well as danceability. This is to be expected since Dark_Side is known have a lot of sensitive and calmer music. To make it more dub Easy Star added more instruments and sounds. This makes the music less sensitive and calm but more energetic and positive!  
 
 
-### week 8 huiswerk
+### Chromagrams 
 
-#### chromagrams!
+#### Any Color You Like - Dark Side
 ```{r}
 any_color_you_like_dark <-
   get_tidy_audio_analysis("1wGoqD0vrf7njGvxm8CEf5") |>
@@ -184,6 +181,8 @@ any_color_you_like_dark |>
   scale_fill_viridis_c()
 
 ```
+
+#### Any Color You Like - Dub Side
 ```{r}
 any_color_you_like_dub <-
   get_tidy_audio_analysis("6Y6hUMmFGfpGggqnrwNYF0") |>
@@ -207,9 +206,8 @@ any_color_you_like_dub |>
   theme_minimal() +
   scale_fill_viridis_c()
 ```
-***
-These two chromagram show the pitches that are used in this piece of music. I have chosen to compare Any Color You Like with the dub-version of itself. As expected, there is not a lot of difference between the two. Since the dub-version still plays the same notes because otherwise it would be a different song! However, the dub-version is a bit longer (3:38) than the original (3:26). 
 
+#### Direct comparison in pitch
 ```{r}
 compmus_long_distance(
   any_color_you_like_dub |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
@@ -228,14 +226,21 @@ compmus_long_distance(
   ) +
   geom_tile() +
   coord_equal() +
-  labs(x = "Dub Side", y = "Dark Side") +
+  labs(x = "Dub Side", y = "Dark_Side") +
   theme_minimal() +
   scale_fill_viridis_c(guide = NULL)
 
 ```
-here we can see the comparison of the two versions. there is no diagonal blue line since it is not an exact copy. What we learn from this is that the structure of the songs is the same, since there is no checkerboard pattern. According to the color of the graph there is some difference in pitches but not a lot. This is all very logical.
 
-### week 9 huiswerk
+
+***
+These two chromagram show the pitches that are used in this piece of music. I have chosen to compare Any Color You Like with the dub-version of itself. As expected, there is not a lot of difference between the two. Since the dub-version still plays the same notes because otherwise it would be a different song! However, the dub-version is a bit longer (3:38) than the original (3:26). 
+
+At last we can see a comparison of the two versions. there is no diagonal blue line since it is not an exact copy. Since there are no recognizeable shape structures in the graph we can conclude that the two songs are symmetrical in song-structure. According to the color of the graph there is some difference in pitches but not a lot. This is all very logical.
+
+### Ceptograms
+
+#### The Great Gig In The Sky - Dub Side
 ```{r}
 great_gig_in_the_sky_dub <-
   get_tidy_audio_analysis("3QqQmA4Cu63Sw1ZTOPTlfP") |> # Change URI.
@@ -272,6 +277,8 @@ great_gig_in_the_sky_dub |>
   scale_fill_viridis_c() +                              
   theme_classic()
 ```
+
+#### The Great Gig In The Sky - Dark Side
 ```{r}
 great_gig_in_the_sky_dark <-
   get_tidy_audio_analysis("25tZHMv3ctlzqDaHAeuU9c") |> # Change URI.
@@ -308,10 +315,12 @@ great_gig_in_the_sky_dark |>
   scale_fill_viridis_c() +                              
   theme_classic()
 ```
-
-
 ***
-I have made cepstrograms of the two versions for The Great Gig In The Sky. The Dark Side version has a very clear magnitude on c02. The dub version also has its highest magnitude on c02 but it is not as strong as the Dark Side version. 
+I have made cepstrograms of the two versions for The Great Gig In The Sky. The Dark Side version has a very clear magnitude on c02. This is because of the singing of Clare Torry which gives a boost in the energy levels and a very different timbre to the song. The dub version also has its highest magnitude on c02 but it is not as strong as the Dark Side version. This is because the singing is not in the foreground but it makes place for Easy Star to show how to dub!
+
+### Timbre self similarity matrices
+
+#### The Great Gig In The Sky - Dub Side
 
 ```{r}
 great_gig_in_the_sky_dub |>
@@ -333,6 +342,7 @@ great_gig_in_the_sky_dub |>
 
 
 ```
+#### The Great Gig In The Sky - Dark Side
 ```{r}
 great_gig_in_the_sky_dark |>
   compmus_self_similarity(timbre, "cosine") |> 
@@ -353,10 +363,12 @@ great_gig_in_the_sky_dark |>
 
 
 ```
+***
+In the two self similarity matrices show that the timbre of the dub-version stays the same for the whole song. The original version however, does have some differences. It is also clear that Clare Torry starts to show her vocal virtuosity around 75 seconds. After the first 2 blocks it gets a bit messy because it is part instrumental and part vocal. However, there is still somewhat of a checkerboard recognizeable which indicates the song is very homogene. 
 
-In the two self similarity matrices show that the timbre of teh dub-version stays the same for the whole song. The original version however, does have some differences. It is also clear that Clare Torry starts to show her vocal virtuosity around 75 seconds. After the first 2 blocks it gets a bit messy because it is part instrumental and part vocal. 
 
-### week 10 huiswerk
+
+### Chordograms
 ```{r}
 circshift <- function(v, n) {
   if (n == 0) v else c(tail(v, n), head(v, -n))
@@ -447,6 +459,7 @@ key_templates <-
 
 ```
 
+#### Money - Dub Side
 ```{r}
 money_dub <-
   get_tidy_audio_analysis("5QREkNN2kAKUsXppK9Vrcu") |>
@@ -476,6 +489,8 @@ money_dub |>
   theme_minimal() +
   labs(x = "Time (s)", y = "")
 ```
+
+#### Money - Dark Side
 ```{r}
 money_dark <-
   get_tidy_audio_analysis("7Gx2q0ueNwvDp2BOZYGCMO") |>
@@ -506,14 +521,59 @@ money_dark |>
   labs(x = "Time (s)", y = "")
 ```
 
+
 *** 
-I am comparing Money with eachother. It seems like they are total opposites.
+I am comparing Money with eachother. It seems like they are total opposites.The parts between around 30-150 seconds and  300-350 seconds of the Dark-version seem very identical which also corresoponds with the actual song. according to Wikipedia the song is the key B minor, which we don't see in chordogram (2). Eb major seems to be the strongest chord according to our chordogram, so that's very interesting. It looks like the chordogram finds it difficult to follow the chord-progression of the song.
+
+It looks like there is less going on in the Dub-version. I think this is because the solo of the Dark-version (which contains the two clear peaks) is replaced by Jamaican-like singing about Jah and money. Also there is a lot of echoing used which might influence how spotify sees the chord-progression of the song
+
+
+
+2. https://en.wikipedia.org/wiki/Money_(Pink_Floyd_song) 
+
+
+
+### Tempograms
+
+#### Time - Dub Side
+
+```{r}
+time_dub <- get_tidy_audio_analysis("1uLBDlBZROhCvLAX5LdKrI")
+
+time_dub |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+
+```
+
+
+
+#### Time - Dark Side
+
+```{r}
+time_dark <- get_tidy_audio_analysis("4xHWH1jwV5j4mBYRhxPbwZ")
+
+time_dark |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+
+```
+
 
 
 ```{r}
+
 Dark_side_of_the_moon <-
   get_playlist_audio_features(
-    "",
+    "spotify",
     "06qCn3TG1q0Aw5o3ky61cj"
   ) |>
   slice(1:30) |>
@@ -570,56 +630,21 @@ corpus |>
 
 ```
 
-
-
-
-### Week 11 huiswerk
-
-#### Graph 1
-
-```{r}
-time_dub <- get_tidy_audio_analysis("1uLBDlBZROhCvLAX5LdKrI")
-
-time_dub |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
-
-```
-This tempogram is of time dub. 
-
-
-#### Graph 2
-
-```{r}
-time_dark <- get_tidy_audio_analysis("4xHWH1jwV5j4mBYRhxPbwZ")
-
-time_dark |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
-
-```
-
-This is a tempogram time dark.
-
 ***
-It is hard for the code to determine a clear BPM for the song. 
+It appears to be hard for the code to determine a clear BPM for the song. Both songs start with clock alarms (the dub-version contains somewhat more primitive alarms like the sound of a rooster) which explains he start of both tempograms. When the singing starts around 150 seconds the BPM rises from 120 to 130. around 180 seconds the song gets more calm and background vocals are added. Apparently this makes it very difficult for spotify to observe a tempo. between 300-330 seconds the music repeats like it was around the 150 sec mark. Also the more calm bit gets repeated. 
+
+The Dub-version is a lot more clear. Because of the reggae rhythm it is easier for spotify to find a clear tempo. This version doesn't have a calmer bit with background vocals. We still see the same change in tempo around the 150 second-mark, which is when the singing starts. The tempogram also gets confused around the 350 seconds. Here almost all music fades out. 
+
+The last graph shows us that Dark Side has a lot more variance in tempo. My theory is that all of the music by Pink Floyd is harder to put into a clear tempogram because of the way that the music is composed. Also, in dub music there is not a lot of variance in tempo.
 
 
-### week 12 huiswerk
+### Dendrograms
 
-#### code 1
+
 
 ```{r}
-halloween <-
-  get_playlist_audio_features("bnfcollection", "1vsoLSK3ArkpaIHmUaF02C") |>
+Dark_Side <-
+  get_playlist_audio_features("bnfcollection", "06qCn3TG1q0Aw5o3ky61cj") |>
   add_audio_analysis() |>
   mutate(
     segments = map2(segments, key, compmus_c_transpose),
@@ -640,10 +665,10 @@ halloween <-
   unnest(cols = c(pitches, timbre))
 ```
 
-#### code 2
+
 
 ```{r}
-halloween_juice <-
+Dark_Side_juice <-
   recipe(
     track.name ~
       danceability +
@@ -661,68 +686,41 @@ halloween_juice <-
       `G#|Ab` + A + `A#|Bb` + B +
       c01 + c02 + c03 + c04 + c05 + c06 +
       c07 + c08 + c09 + c10 + c11 + c12,
-    data = halloween
+    data = Dark_Side
   ) |>
   step_center(all_predictors()) |>
   step_scale(all_predictors()) |> 
   # step_range(all_predictors()) |> 
-  prep(halloween |> mutate(track.name = str_trunc(track.name, 20))) |>
+  prep(Dark_Side |> mutate(track.name = str_trunc(track.name, 20))) |>
   juice() |>
   column_to_rownames("track.name")
 ```
 
-#### code 3
+
 
 ```{r}
-halloween_dist <- dist(halloween_juice, method = "euclidean")
+Dark_Side_dist <- dist(Dark_Side_juice, method = "euclidean")
 ```
 
-#### code 4
+#### Dendrogram Dark Side
 
 ```{r}
-halloween_dist |> 
-  hclust(method = "single") |> # Try single, average, and complete.
+Dark_Side_dist |> 
+  hclust(method = "average") |> # Try single, average, and complete.
   dendro_data() |>
   ggdendrogram()
 ```
 
-#### code 5
+
 
 ```{r}
-heatmaply(
-  halloween_juice,
-  hclustfun = hclust,
-  hclust_method = "average",  # Change for single, average, or complete linkage.
-  dist_method = "euclidean"
-)
-```
-
-#### code 6
-
-```{r}
-pop <- get_playlist_audio_features("spotify", "37i9dQZF1DWWEcRhUVtL8n")
-party <- get_playlist_audio_features("spotify", "37i9dQZF1DWTujiC7wfofZ")
-workout <- get_playlist_audio_features("spotify", "37i9dQZF1DWZq91oLsHZvy")
-indie <-
-  bind_rows(
-    pop |> mutate(playlist = "Indie Pop") |> slice_head(n = 20),
-    party |> mutate(playlist = "Indie Party") |> slice_head(n = 20),
-    workout |> mutate(playlist = "Indie Running") |> slice_head(n = 20)
-  ) |> 
-  add_audio_analysis()
-```
-
-#### code 7
-
-```{r}
-indie_features <-
-  indie |>  # For your portfolio, change this to the name of your corpus.
+Dub_Side <-
+  get_playlist_audio_features("bnfcollection", "6NZckmxOUUYgPcx9wm8UVJ") |>
+  add_audio_analysis() |>
   mutate(
-    playlist = factor(playlist),
     segments = map2(segments, key, compmus_c_transpose),
     pitches =
-      map(
-        segments,
+      map(segments,
         compmus_summarise, pitches,
         method = "mean", norm = "manhattan"
       ),
@@ -730,7 +728,7 @@ indie_features <-
       map(
         segments,
         compmus_summarise, timbre,
-        method = "mean",
+        method = "mean"
       )
   ) |>
   mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
@@ -738,12 +736,12 @@ indie_features <-
   unnest(cols = c(pitches, timbre))
 ```
 
-#### code 8
+
 
 ```{r}
-indie_recipe <-
+Dub_Side_juice <-
   recipe(
-    playlist ~
+    track.name ~
       danceability +
       energy +
       loudness +
@@ -759,117 +757,35 @@ indie_recipe <-
       `G#|Ab` + A + `A#|Bb` + B +
       c01 + c02 + c03 + c04 + c05 + c06 +
       c07 + c08 + c09 + c10 + c11 + c12,
-    data = indie_features           # Use the same name as the previous block.
+    data = Dub_Side
   ) |>
   step_center(all_predictors()) |>
-  step_scale(all_predictors())      # Converts to z-scores.
-  # step_range(all_predictors())    # Sets range to [0, 1].
+  step_scale(all_predictors()) |> 
+  # step_range(all_predictors()) |> 
+  prep(Dub_Side |> mutate(track.name = str_trunc(track.name, 20))) |>
+  juice() |>
+  column_to_rownames("track.name")
 ```
 
-#### code 9
+
 
 ```{r}
-indie_cv <- indie_features |> vfold_cv(5)
+Dub_Side_dist <- dist(Dub_Side_juice, method = "euclidean")
 ```
 
-#### code 10
-
-```{R}
-knn_model <-
-  nearest_neighbor(neighbors = 1) |>
-  set_mode("classification") |> 
-  set_engine("kknn")
-indie_knn <- 
-  workflow() |> 
-  add_recipe(indie_recipe) |> 
-  add_model(knn_model) |> 
-  fit_resamples(indie_cv, control = control_resamples(save_pred = TRUE))
-```
-
-#### code 11
+#### Dendrogram Dub Side
 
 ```{r}
-indie_knn |> get_conf_mat()
+Dub_Side_dist |> 
+  hclust(method = "average") |> # Try single, average, and complete.
+  dendro_data() |>
+  ggdendrogram()
+
 ```
-
-#### code 12
-
-```{r}
-indie_knn |> get_conf_mat() |> autoplot(type = "mosaic")
-```
-
-#### code 13
-
-```{r}
-indie_knn |> get_conf_mat() |> autoplot(type = "heatmap")
-```
-
-#### code 14
-
-```{r}
-indie_knn |> get_pr()
-```
-
-#### code 15
-
-```{r}
-forest_model <-
-  rand_forest() |>
-  set_mode("classification") |> 
-  set_engine("ranger", importance = "impurity")
-indie_forest <- 
-  workflow() |> 
-  add_recipe(indie_recipe) |> 
-  add_model(forest_model) |> 
-  fit_resamples(
-    indie_cv, 
-    control = control_resamples(save_pred = TRUE)
-  )
-```
-
-#### code 16
-
-```{r}
-indie_forest |> get_pr()
-```
-
-#### code 17
-
-```{r}
-workflow() |> 
-  add_recipe(indie_recipe) |> 
-  add_model(forest_model) |> 
-  fit(indie_features) |> 
-  pluck("fit", "fit", "fit") |>
-  ranger::importance() |> 
-  enframe() |> 
-  mutate(name = fct_reorder(name, value)) |> 
-  ggplot(aes(name, value)) + 
-  geom_col() + 
-  coord_flip() +
-  theme_minimal() +
-  labs(x = NULL, y = "Importance")
-```
-
-#### code 18
-
-```{r}
-indie_features |>
-  ggplot(aes(x = acousticness, y = c02, colour = playlist, size = energy)) +
-  geom_point(alpha = 0.8) +
-  scale_color_viridis_d() +
-  labs(
-    x = "Acousticness",
-    y = "Timbre Component 2",
-    size = "Energy",
-    colour = "Playlist"
-  )
-```
-
- 
-
+***
+The dendrograms show that is hard to put the songs into clusters. I must admit that I find these graphs confusing for this project since the all the songs are from the same album and thus are somewhat alike. Therefore it is a bit pointless to see what clusters are formed. However it is interesting to see that most songs are separate from eachother.
 
 ### Conclusion
 
-Ewaja
+So, we have analyzed all kinds of graphs showcasing the difference in spotify API's.
 
