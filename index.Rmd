@@ -366,7 +366,7 @@ great_gig_in_the_sky_dark |>
 ***
 In the two self similarity matrices show that the timbre of the dub-version stays the same for the whole song. The original version however, does have some differences. It is also clear that Clare Torry starts to show her vocal virtuosity around 75 seconds. After the first 2 blocks it gets a bit messy because it is part instrumental and part vocal. However, there is still somewhat of a checkerboard recognizable which indicates the song is very homogene. 
 
-The graph of the dub-version is very empty and there is no recognizable pattern. This means that there a nog changes in timbre in the song.
+The graph of the dub-version is very empty and there is no recognizable pattern. This means that there a no changes in timbre in the song.
 
 
 
@@ -787,5 +787,25 @@ Dub_Side_dist |>
 ***
 The dendrograms show that is hard to put the songs into clusters. I must admit that I find these graphs confusing for this project since the all the songs are from the same album and thus are somewhat alike. Therefore it is a bit pointless to see what clusters are formed. However it is interesting to see that most songs are separate from eachother.
 
+### Conclusion
+So, what did we learn from all these graphs and analysis?
 
+First we saw that there is a very clear difference in danceablity, valence and energy between these two albums. This is what we expected because reggae/dub is known to be danceable and happy music. Also, the Pink Floyd album is very beautiful but it is not danceable!
+
+In the chromagrams we learned that the same notes are used in both versions of Any Color You Like. This is very logical because it is mostly the same song. Also the song structure remained the same in the dub-ified version.
+
+In the cepstrograms we saw that the singing part in The Great Gig In The Sky really showed in the original version while it wasn't clearly visible in the reggae version. This is because the singing wasn't in the limelight of the song but the reggae-riddim was.
+
+In the self similarity matrices of the same song we still see the parts where the singing is happening. In the dub version we don't see any shapes which tells us that there are no changes in the instrumentation of the song.
+
+The chordograms showed us that it is difficult to find the chord progression of the songs. It seems like the chords are blurry because of the overtones of the notes that are played. We can still see a difference between the two versions of Money and we can explain this because of the different song-structure. The dub version has a lot of singing in the part where there is a solo in the normal version.
+
+The tempograms of Time were also hard to determine for the algorithm. But there was a clear similarity between the two versions in tempo. This is also explainable because it is stil somewhat the same song.
+
+We also saw that Dark Side Of The Moon has a lot more variance in tempo. I think that has to do with the algorithm struggling with determining a BPM when the songs are a bit more soft.
+
+At last we had the dendrograms clustering the songs. Here we saw that almost all songs of both albums got separated from eachother.
+
+
+I found it to be very interesting to see how spotify sees the difference between these two albums. The albums are very similar but also very different. Mostly the timbre is different and the pitch is the same. Which is to be expected with different versions of the same song.
 
